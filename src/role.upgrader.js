@@ -1,24 +1,11 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('role.upgrader');
- * mod.thing == 'a thing'; // true
- */
-
-const getRandomInt = require('getRandomInt');
+const registMemorySource = require('registMemory.source');
 
 const roleUpgrader = {
   /** @param {Creep} creep **/
   run: function (creep) {
     if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
       creep.memory.upgrading = false;
-
-      const sources = creep.room.find(FIND_SOURCES);
-      const randTargetId = sources[getRandomInt(sources.length)].id;
-      creep.memory.harvestTargetId = randTargetId;
-
+      registMemorySource.randomFind(creep);
       creep.say('🔄 harvest');
     }
     if (!creep.memory.upgrading && creep.store.getFreeCapacity() == 0) {
