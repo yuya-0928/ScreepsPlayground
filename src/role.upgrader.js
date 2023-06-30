@@ -7,18 +7,16 @@
  * mod.thing == 'a thing'; // true
  */
 
-var getRandomInt = require('getRandomInt');
+const getRandomInt = require('getRandomInt');
 
-var roleUpgrader = {
-
+const roleUpgrader = {
   /** @param {Creep} creep **/
   run: function (creep) {
-
     if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
       creep.memory.upgrading = false;
 
-      var sources = creep.room.find(FIND_SOURCES);
-      var randTargetId = sources[getRandomInt(sources.length)].id
+      const sources = creep.room.find(FIND_SOURCES);
+      const randTargetId = sources[getRandomInt(sources.length)].id;
       creep.memory.harvestTargetId = randTargetId;
 
       creep.say('🔄 harvest');
@@ -30,21 +28,25 @@ var roleUpgrader = {
 
     if (creep.memory.upgrading) {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
+        creep.moveTo(creep.room.controller, {
+          visualizePathStyle: { stroke: '#ffffff' },
+        });
       }
-    }
-    else {
+    } else {
       if (creep.memory.harvestTargetId) {
-        var sources = []
+        const sources = [];
         sources.push(Game.getObjectById(creep.memory.harvestTargetId));
+        if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+        }
       } else {
-        var sources = creep.room.find(FIND_SOURCES);
-      }
-      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+        const sources = creep.room.find(FIND_SOURCES);
+        if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+        }
       }
     }
-  }
+  },
 };
 
 module.exports = roleUpgrader;
