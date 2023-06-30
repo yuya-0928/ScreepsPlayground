@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
+// eslint-disable-next-line no-undef
 const { SCREEPS_LOCAL_PATH } = process.env;
 
 const path = './src/';
@@ -7,7 +8,7 @@ const screepLocalPath = SCREEPS_LOCAL_PATH;
 
 fs.readdir(path, (err, files) => {
   if (err) {
-    console.error("Could not list the directory.", err);
+    console.error('Could not list the directory.', err);
     return;
   }
 
