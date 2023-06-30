@@ -1,24 +1,11 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('role.builder');
- * mod.thing == 'a thing'; // true
- */
-
-const getRandomInt = require('getRandomInt');
+const registMemorySource = require('registMemory.source');
 
 const roleBuilder = {
   /** @param {Creep} creep **/
   run: function (creep) {
     if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
       creep.memory.building = false;
-
-      const roomSources = creep.room.find(FIND_SOURCES);
-      const randTargetId = roomSources[getRandomInt(roomSources.length)].id;
-      creep.memory.harvestTargetId = randTargetId;
-
+      registMemorySource.randomFind(creep);
       creep.say('🔄 harvest');
     }
     if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
