@@ -12,7 +12,7 @@ fs.readdir(path, (err, files) => {
     return;
   }
 
-  for (let index = 0; index < files.length - 1; index++) {
+  for (let index = 0; index < files.length; index++) {
     const element = files[index];
     fs.copyFileSync(path + element, screepLocalPath + '/' + element);
   }
