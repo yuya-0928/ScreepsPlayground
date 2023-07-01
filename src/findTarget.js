@@ -32,7 +32,7 @@ const findTarget = {
       filter: (structure) => {
         return (
           structure.structureType == STRUCTURE_CONTAINER &&
-          structure.store.getCapacity() > 0
+          structure.store[RESOURCE_ENERGY] > 0
         );
       },
     });
