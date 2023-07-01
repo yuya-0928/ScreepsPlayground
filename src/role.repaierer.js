@@ -1,10 +1,12 @@
 const findTarget = require('./findTarget');
 const actionHarvest = require('./action.harvest');
+const memoryManager = require('./memoryManager');
 
 const roleRepaierer = {
   /** @param {Creep} creep **/
   run: function (creep) {
     if (creep.memory.repaiering && creep.store[RESOURCE_ENERGY] == 0) {
+      memoryManager.refreshMemory(creep);
       creep.memory.repaiering = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
       creep.memory.harvestTargetId = randTargetId;
@@ -12,6 +14,7 @@ const roleRepaierer = {
     }
 
     if (!creep.memory.repaiering && creep.store.getFreeCapacity() == 0) {
+      memoryManager.refreshMemory(creep);
       creep.memory.repaiering = true;
       const targets = creep.room.find(FIND_STRUCTURES, {
         filter: object => object.hits < object.hitsMax
