@@ -34,6 +34,13 @@ const roleRepaierer = {
             visualizePathStyle: { stroke: '#ffffff' },
           });
         }
+        if (targets[0].hits == targets[0].hitsMax) {
+          const targets = creep.room.find(FIND_STRUCTURES, {
+            filter: object => object.hits < object.hitsMax
+          });
+          targets.sort((a, b) => a.hits - b.hits);
+          creep.memory.repaierTargetId = targets[0].id;
+        }
       } else {
         const targets = creep.room.find(FIND_STRUCTURES, {
           filter: object => object.hits < object.hitsMax

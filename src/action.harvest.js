@@ -5,7 +5,6 @@ const actionHarvest = {
     if (creep.memory.harvestTargetId) {
       const sources = [];
       sources.push(Game.getObjectById(creep.memory.harvestTargetId));
-
       switch (creep.harvest(sources[0])) {
         case ERR_NOT_IN_RANGE: {
           creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
