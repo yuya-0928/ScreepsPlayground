@@ -15,14 +15,10 @@ const actionHarvest = {
           const targetId = findTarget.randomSourcesFind(creep);
           if (targetId) {
             creep.memory.harvestTargetId = targetId;
-          } else if (creep.memory.role !== 'harvester') {
-            const targetId = findTarget.randomContainersFind(creep);
-            creep.memory.harvestTargetId = targetId;
           }
           break;
         }
       }
-
     } else {
       const randTargetId = findTarget.randomSourcesFind(creep);
       creep.memory.harvestTargetId = randTargetId;
