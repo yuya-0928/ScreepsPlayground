@@ -1,16 +1,19 @@
 const findTarget = require('./findTarget');
 const actionHarvest = require('./action.harvest');
+const memoryManager = require('./memoryManager');
 
 const roleBuilder = {
   /** @param {Creep} creep **/
   run: function (creep) {
     if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
+      memoryManager.refreshMemory(creep);
       creep.memory.building = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
       creep.memory.harvestTargetId = randTargetId;
       creep.say('🔄 harvest');
     }
     if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
+      memoryManager.refreshMemory(creep);
       creep.memory.building = true;
       creep.say('🚧 build');
     }
