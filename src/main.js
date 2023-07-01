@@ -7,6 +7,8 @@ const spawnBuilder = require('./spawn.builder');
 const spawnUpgrader = require('./spawn.upgrader');
 const logger = require('./logger');
 const findTarget = require('./findTarget');
+const roleRepaierer = require('./role.repaierer');
+const spawnRepaierer = require('./spawn.repaierer');
 
 const findCreepsByRole = (role) => {
   return _.filter(Game.creeps, (creep) => creep.memory.role == role);
@@ -49,6 +51,16 @@ module.exports.loop = function () {
     spawnBuilder.run(Game.spawns['Spawn1']);
   }
 
+  const repaierers = findCreepsByRole('repaierer')
+  if (
+    harvesters.length == managementCreepCount.harvester &&
+    upgraders.length == managementCreepCount.upgrader &&
+    builders.length == managementCreepCount.builder &&
+    repaierers.length < managementCreepCount.repaierer
+  ) {
+    spawnRepaierer.run(Game.spawns['Spawn1']);
+  }
+
   spawnerStatus.show(Game.spawns['Spawn1']);
 
 
@@ -56,7 +68,7 @@ module.exports.loop = function () {
     const creep = Game.creeps[name];
     switch (creep.memory.role) {
       case 'harvester': {
-        const harvestingTargets = findTarget.harvest(creep);
+        const harvestingTargets = findTarget.filling(creep);
         if (harvestingTargets.length === 0) {
           roleUpgrader.run(creep);
         } else {
@@ -72,17 +84,56 @@ module.exports.loop = function () {
 
       case 'builder': {
         const buildingTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
+        const repaierTargets = creep.room.find(FIND_STRUCTURES, {
+          filter: object => object.hits < object.hitsMax
+        });
         if (harvesters.length < 3) {
           roleHarvester.run(creep);
-        } else if (buildingTargets.length === 0) {
-          roleUpgrader.run(creep);
-        } else {
+        } else if (buildingTargets.length > 0) {
           roleBuilder.run(creep);
+        } else if (repaierTargets.length > 0) {
+          roleRepaierer.run(creep);
+        } else {
+          roleUpgrader.run(creep);
+        }
+        break;
+      }
+
+      case 'repaierer': {
+        const repaierTargets = creep.room.find(FIND_STRUCTURES, {
+          filter: object => object.hits < object.hitsMax
+        });
+        if (harvesters.length < 3) {
+          roleHarvester.run(creep);
+        } else if (repaierTargets.length > 0) {
+          roleRepaierer.run(creep);
+        } else {
+          roleUpgrader.run(creep);
+        }
+        break;
+      }
+
+      case 'attacker': {
+        const targets = creep.room.find(FIND_HOSTILE_CREEPS);
+        if (targets.length) {
+          if (creep.attack(targets[0]) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ff0000' } });
+          }
+        }
+        break
+      }
+
+      case 'healer': {
+        const targets = creep.room.find(FIND_HOSTILE_CREEPS);
+        if (targets.length) {
+          if (creep.attack(targets[0]) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ff0000' } });
+          }
         }
         break;
       }
     }
   }
 
-  logger.creepCountInfo(harvesters, upgraders, builders);
+  logger.creepCountInfo(harvesters, upgraders, builders, repaierers);
 };
