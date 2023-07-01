@@ -1,9 +1,10 @@
 const logger = {
-  creepCountInfo(harvesters, upgraders, builders) {
+  creepCountInfo(harvesters, upgraders, builders, repaierers) {
     console.log(
       'harvesters: ' + harvesters.length,
       'upgraders: ' + upgraders.length,
-      'builders: ' + builders.length
+      'builders: ' + builders.length,
+      'repaierers: ' + repaierers.length,
     );
   }
 }
