@@ -22,9 +22,7 @@ const roleHarvester = {
       creep.say('⛽ refuel');
     }
 
-    if (!creep.memory.refueling) {
-      actionHarvest.run(creep);
-    } else {
+    if (creep.memory.refueling) {
       const targets = findTarget.filling(creep);
       if (targets.length > 0) {
         if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -33,6 +31,8 @@ const roleHarvester = {
           });
         }
       }
+    } else {
+      actionHarvest.run(creep);
     }
   },
 };
