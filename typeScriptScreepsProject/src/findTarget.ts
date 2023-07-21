@@ -1,4 +1,4 @@
-const getRandomInt = require("getRandomInt");
+import { getRandomInt } from "./getRandomInt";
 
 export const findTarget = {
   filling: (creep: Creep) => {
