@@ -12,8 +12,10 @@ import { spawnRepaierer } from "./spawn.repaierer";
 import { deleteDeadCreepMemory } from "./deleteDeadCreepMemory";
 import _ from "lodash";
 
-interface CreepMemory {
-  role: any;
+export interface CreepMemory {
+  role: string;
+  refueling: boolean;
+  harvestTargetId: string;
 }
 
 deleteDeadCreepMemory();
