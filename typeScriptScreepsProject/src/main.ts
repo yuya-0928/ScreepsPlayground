@@ -15,7 +15,8 @@ import _ from "lodash";
 export interface CreepMemory {
   role: string;
   refueling: boolean;
-  harvestTargetId: string;
+  harvestTargetId?: string;
+  upgrading?: boolean;
 }
 
 deleteDeadCreepMemory();
