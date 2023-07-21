@@ -17,6 +17,7 @@ export interface CreepMemory {
   refueling: boolean;
   harvestTargetId?: string;
   upgrading?: boolean;
+  building?: boolean;
 }
 
 deleteDeadCreepMemory();
