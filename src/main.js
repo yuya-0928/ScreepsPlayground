@@ -9,6 +9,9 @@ const logger = require('./logger');
 const findTarget = require('./findTarget');
 const roleRepaierer = require('./role.repaierer');
 const spawnRepaierer = require('./spawn.repaierer');
+const deleteDeadCreepMemory = require('./deleteDeadCreepMemory');
+
+deleteDeadCreepMemory();
 
 const findCreepsByRole = (role) => {
   return _.filter(Game.creeps, (creep) => creep.memory.role == role);
