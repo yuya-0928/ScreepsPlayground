@@ -13,6 +13,7 @@ import { deleteDeadCreepMemory } from "./deleteDeadCreepMemory";
 import _ from "lodash";
 
 export interface CreepMemory {
+  [key: string]: any;
   role: string;
   refueling: boolean;
   harvestTargetId: string;
