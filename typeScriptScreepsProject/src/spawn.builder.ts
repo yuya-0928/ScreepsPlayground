@@ -11,5 +11,3 @@ export const spawnBuilder = {
     );
   },
 };
-
-module.exports = spawnBuilder;

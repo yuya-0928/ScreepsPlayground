@@ -11,5 +11,3 @@ export const spawnHarvester = {
     );
   },
 };
-
-module.exports = spawnHarvester;
