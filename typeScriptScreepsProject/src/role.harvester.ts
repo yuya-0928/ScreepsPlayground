@@ -1,6 +1,6 @@
-const findTarget = require("./findTarget");
-const actionHarvest = require("./action.harvest");
-const memoryManager = require("./memoryManager");
+import { findTarget } from "./findTarget";
+import { actionHarvest } from "./action.harvest";
+import { memoryManager } from "./memoryManager";
 import { CreepMemory } from "./main";
 
 export const roleHarvester = {

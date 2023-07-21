@@ -11,5 +11,3 @@ export const spawnUpgrader = {
     );
   },
 };
-
-module.exports = spawnUpgrader;
