@@ -18,6 +18,8 @@ export interface CreepMemory {
   harvestTargetId?: string;
   upgrading?: boolean;
   building?: boolean;
+  repaiering?: boolean;
+  repaierTargetId: string;
 }
 
 deleteDeadCreepMemory();
