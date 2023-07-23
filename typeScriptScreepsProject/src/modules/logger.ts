@@ -1,5 +1,6 @@
 import { caluclateCreepCost } from "../managementCreep";
 import { creepStatus } from "../managementCreep";
+import { findTarget } from "./findTarget";
 
 export const logger = {
   creepCountInfo: (
@@ -16,12 +17,18 @@ export const logger = {
     );
   },
 
-  caluclateCreepCost: () => {
+  creepCosts: () => {
     console.log(
       "harvesters_cost: " + caluclateCreepCost(creepStatus.harvester),
       "upgraders_cost: " + caluclateCreepCost(creepStatus.upgrader),
       "builders_cost: " + caluclateCreepCost(creepStatus.builder),
       "repaierers_cost: " + caluclateCreepCost(creepStatus.repaierer)
+    );
+  },
+
+  sourceCountBuildingCreep: () => {
+    console.log(
+      "sourceCountBuildingCreep: " + findTarget.sourceBuildingCreep()
     );
   },
 };

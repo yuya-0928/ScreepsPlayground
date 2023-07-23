@@ -157,5 +157,6 @@ module.exports.loop = function () {
   }
 
   logger.creepCountInfo(harvesters, upgraders, builders, repaierers);
-  logger.caluclateCreepCost();
+  logger.creepCosts();
+  logger.sourceCountBuildingCreep();
 };
