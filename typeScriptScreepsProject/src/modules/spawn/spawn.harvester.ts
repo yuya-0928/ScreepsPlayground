@@ -1,4 +1,4 @@
-import { creepStatus } from "../../managementCreepCount";
+import { creepStatus } from "../../managementCreep";
 
 export const spawnHarvester = {
   run: function (spawn: StructureSpawn) {
