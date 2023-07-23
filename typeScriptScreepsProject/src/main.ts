@@ -1,5 +1,5 @@
 import { roleBuilder } from "./modules/role/role.builder";
-import { managementCreepCount } from "./managementCreepCount";
+import { managementCreepCount } from "./managementCreep";
 import { spawnUpgrader } from "./modules/spawn/spawn.upgrader";
 import { logger } from "./modules/logger";
 import { findTarget } from "./modules/findTarget";
@@ -157,4 +157,5 @@ module.exports.loop = function () {
   }
 
   logger.creepCountInfo(harvesters, upgraders, builders, repaierers);
+  logger.caluclateCreepCost();
 };
