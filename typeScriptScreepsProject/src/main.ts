@@ -1,5 +1,5 @@
 import { roleBuilder } from "./modules/role/role.builder";
-import { managementCreepCount } from "./managementCreep";
+import { managementCreepCount, minimumHarvesterCount } from "./managementCreep";
 import { spawnUpgrader } from "./modules/spawn/spawn.upgrader";
 import { logger } from "./modules/logger";
 import { findTarget } from "./modules/findTarget";
@@ -104,7 +104,7 @@ module.exports.loop = function () {
         const repaierTargets = creep.room.find(FIND_STRUCTURES, {
           filter: (object) => object.hits < object.hitsMax,
         });
-        if (harvesters.length < 3) {
+        if (harvesters.length < minimumHarvesterCount) {
           roleHarvester.run(creep);
         } else if (buildingTargets.length > 0) {
           roleBuilder.run(creep);
@@ -120,7 +120,7 @@ module.exports.loop = function () {
         const repaierTargets = creep.room.find(FIND_STRUCTURES, {
           filter: (object) => object.hits < object.hitsMax,
         });
-        if (harvesters.length < 3) {
+        if (harvesters.length < minimumHarvesterCount) {
           roleHarvester.run(creep);
         } else if (repaierTargets.length > 0) {
           roleRepaierer.run(creep);
