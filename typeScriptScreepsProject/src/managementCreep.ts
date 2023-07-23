@@ -4,7 +4,7 @@ export const managementCreepCount = {
   harvester: 2,
   upgrader: 2,
   builder: 2,
-  repaierer: 2,
+  repaierer: 0,
 };
 
 export const creepStatus = {
