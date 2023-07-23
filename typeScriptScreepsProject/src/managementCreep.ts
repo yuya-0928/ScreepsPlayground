@@ -14,3 +14,10 @@ export const creepStatus = {
   repaierer: [WORK, CARRY, MOVE, MOVE],
 };
 
+export const caluclateCreepCost = (creepStatus: BodyPartConstant[]): number => {
+  let cost = 0;
+  for (const bodyPart of creepStatus) {
+    cost += creepCosts[bodyPart];
+  }
+  return cost;
+};
