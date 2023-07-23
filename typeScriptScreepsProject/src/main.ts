@@ -1,16 +1,16 @@
-import { roleHarvester } from "./role.harvester";
-import { roleUpgrader } from "./role.upgrader";
-import { roleBuilder } from "./role.builder";
+import { roleBuilder } from "./modules/role/role.builder";
 import { managementCreepCount } from "./managementCreepCount";
-import { spawnHarvester } from "./spawn.harvester";
-import { spawnBuilder } from "./spawn.builder";
-import { spawnUpgrader } from "./spawn.upgrader";
-import { logger } from "./logger";
-import { findTarget } from "./findTarget";
-import { roleRepaierer } from "./role.repaierer";
-import { spawnRepaierer } from "./spawn.repaierer";
-import { deleteDeadCreepMemory } from "./deleteDeadCreepMemory";
+import { spawnUpgrader } from "./modules/spawn/spawn.upgrader";
+import { logger } from "./modules/logger";
+import { findTarget } from "./modules/findTarget";
+import { spawnRepaierer } from "./modules/spawn/spawn.repaierer";
+import { deleteDeadCreepMemory } from "./modules/deleteDeadCreepMemory";
 import { filter } from "lodash";
+import { roleHarvester } from "./modules/role/role.harvester";
+import { spawnHarvester } from "./modules/spawn/spawn.harvester";
+import { spawnBuilder } from "./modules/spawn/spawn.builder";
+import { roleUpgrader } from "./modules/role/role.upgrader";
+import { roleRepaierer } from "./modules/role/role.repaierer";
 
 export interface CreepMemory {
   [key: string]: any;

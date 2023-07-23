@@ -1,4 +1,4 @@
-import { CreepMemory } from "./main";
+import { CreepMemory } from "../main";
 
 export const memoryManager = {
   refreshMemory: function (creep: Creep) {
