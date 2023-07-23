@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc src/** --outDir ./build",
+    "build": "ts-node build.ts",
     "deploy": "ts-node deploy.ts"
   },
   "author": "",
@@ -15,6 +15,9 @@
     "@types/node": "^20.4.2",
     "@types/screeps": "^3.3.3",
     "dotenv": "^16.3.1",
+    "esbuild": "^0.18.16",
+    "glob": "^10.3.3",
+    "lodash": "^4.17.21",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }
