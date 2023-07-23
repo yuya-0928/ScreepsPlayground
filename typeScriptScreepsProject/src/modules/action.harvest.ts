@@ -1,5 +1,5 @@
 import { findTarget } from "./findTarget";
-import { CreepMemory } from "./main";
+import { CreepMemory } from "../main";
 
 export const actionHarvest = {
   run: function (creep: Creep) {

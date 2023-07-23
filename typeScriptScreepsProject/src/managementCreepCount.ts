@@ -7,7 +7,7 @@ export const managementCreepCount = {
 
 export const creepStatus = {
   harvester: [WORK, CARRY, MOVE, MOVE],
-  upgrader: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+  upgrader: [WORK, CARRY, MOVE, MOVE],
   builder: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
   repaierer: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
 };

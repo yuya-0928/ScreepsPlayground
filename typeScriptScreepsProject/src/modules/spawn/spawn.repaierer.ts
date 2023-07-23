@@ -1,4 +1,4 @@
-import { creepStatus } from "./managementCreepCount";
+import { creepStatus } from "../../managementCreepCount";
 
 export const spawnRepaierer = {
   run: function (spawn: StructureSpawn) {
