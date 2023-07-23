@@ -43,5 +43,3 @@ export const findTarget = {
     return containers[getRandomInt(containers.length)].id;
   },
 };
-
-module.exports = findTarget;
