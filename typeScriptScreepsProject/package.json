@@ -16,7 +16,6 @@
     "@types/screeps": "^3.3.3",
     "dotenv": "^16.3.1",
     "esbuild": "^0.18.16",
-    "glob": "^10.3.3",
     "lodash": "^4.17.21",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
