@@ -10,7 +10,7 @@ import { findTarget } from "./findTarget";
 import { roleRepaierer } from "./role.repaierer";
 import { spawnRepaierer } from "./spawn.repaierer";
 import { deleteDeadCreepMemory } from "./deleteDeadCreepMemory";
-import _ from "lodash";
+import { filter } from "lodash";
 
 export interface CreepMemory {
   [key: string]: any;
@@ -26,7 +26,7 @@ export interface CreepMemory {
 deleteDeadCreepMemory();
 
 const findCreepsByRole = (role: string) => {
-  return _.filter(
+  return filter(
     Game.creeps,
     (creep: Creep) => (creep.memory as CreepMemory).role == role
   );
