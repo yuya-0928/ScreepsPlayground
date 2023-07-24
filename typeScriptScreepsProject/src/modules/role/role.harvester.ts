@@ -3,13 +3,13 @@ import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
 
+const isHarvesting = (creep: Creep) => {
+  return (creep.memory as CreepMemory).refueling;
+};
+
 export const roleHarvester = {
-  /** @param {Creep} creep **/
   run: function (creep: Creep) {
-    if (
-      (creep.memory as CreepMemory).refueling &&
-      creep.store[RESOURCE_ENERGY] == 0
-    ) {
+    if (isHarvesting(creep) && creep.store[RESOURCE_ENERGY] == 0) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).refueling = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
@@ -19,7 +19,7 @@ export const roleHarvester = {
     }
 
     if (
-      !(creep.memory as CreepMemory).refueling &&
+      !isHarvesting(creep) &&
       creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0
     ) {
       memoryManager.refreshMemory(creep);
