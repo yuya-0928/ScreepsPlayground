@@ -1,5 +1,5 @@
 import { findTarget } from "../findTarget";
-import { actionHarvest } from "../action.harvest";
+import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
 
@@ -32,11 +32,13 @@ export const roleUpgrader = {
         creep.room.controller &&
         creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE
       ) {
+        // TODO: Creepの動作状態をMemoryに保存
         creep.moveTo(creep.room.controller, {
           visualizePathStyle: { stroke: "#ffffff" },
         });
       }
     } else {
+      // TODO: Creepの動作状態をMemoryに保存
       actionHarvest.run(creep);
     }
   },
