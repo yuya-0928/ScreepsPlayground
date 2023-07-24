@@ -3,17 +3,10 @@ import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
 import { actionMove } from "../action/action.move";
+import { isCreepStoreEmpty, isCreepStoreFull } from "../check/check.store";
 
 const isBuilding = (creep: Creep) => {
   return (creep.memory as CreepMemory).building;
-};
-
-const isStoreEmpty = (creep: Creep) => {
-  return creep.store[RESOURCE_ENERGY] == 0;
-};
-
-const isStoreFull = (creep: Creep) => {
-  return creep.store.getFreeCapacity() == 0;
 };
 
 export const roleBuilder = {
@@ -22,7 +15,7 @@ export const roleBuilder = {
 
     switch (isBuilding(creep)) {
       case true:
-        if (isStoreEmpty(creep)) {
+        if (isCreepStoreEmpty(creep)) {
           memoryManager.refreshMemory(creep);
           const randTargetId = findTarget.randomSourcesFind(creep);
           (creep.memory as CreepMemory).building = false;
@@ -41,7 +34,7 @@ export const roleBuilder = {
         break;
 
       case false:
-        if (isStoreFull(creep)) {
+        if (isCreepStoreFull(creep)) {
           memoryManager.refreshMemory(creep);
           (creep.memory as CreepMemory).building = true;
           creep.say("🚧 build");
