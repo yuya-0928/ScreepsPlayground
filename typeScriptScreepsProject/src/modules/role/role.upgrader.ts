@@ -2,6 +2,7 @@ import { findTarget } from "../findTarget";
 import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
+import { isCreepStoreEmpty, isCreepStoreFull } from "../check/check.store";
 
 const isUpgrading = (creep: Creep) => {
   return (creep.memory as CreepMemory).upgrading;
@@ -10,7 +11,7 @@ const isUpgrading = (creep: Creep) => {
 export const roleUpgrader = {
   /** @param {Creep} creep **/
   run: function (creep: Creep) {
-    if (isUpgrading(creep) && creep.store[RESOURCE_ENERGY] == 0) {
+    if (isUpgrading(creep) && isCreepStoreEmpty(creep)) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).upgrading = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
@@ -18,7 +19,7 @@ export const roleUpgrader = {
       (creep.memory as CreepMemory).roleAs = "upgrader";
       creep.say("🔄 harvest");
     }
-    if (!isUpgrading(creep) && creep.store.getFreeCapacity() == 0) {
+    if (!isUpgrading(creep) && isCreepStoreFull(creep)) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).upgrading = true;
       (creep.memory as CreepMemory).roleAs = "upgrader";
