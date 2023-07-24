@@ -12,62 +12,66 @@ export const roleRepaierer = {
   run: function (creep: Creep) {
     (creep.memory as CreepMemory).roleAs = "repaierer";
 
-    if (isRepaiering(creep) && isCreepStoreEmpty(creep)) {
-      memoryManager.refreshMemory(creep);
-      (creep.memory as CreepMemory).repaiering = false;
-      const randTargetId = findTarget.randomSourcesFind(creep);
-      (creep.memory as CreepMemory).harvestTargetId = randTargetId;
-      creep.say("🔄 harvest");
-    }
-
-    if (!isRepaiering(creep) && isCreepStoreFull(creep)) {
-      memoryManager.refreshMemory(creep);
-      (creep.memory as CreepMemory).repaiering = true;
-      const targets = creep.room.find(FIND_STRUCTURES, {
-        filter: (object) => object.hits < object.hitsMax,
-      });
-      targets.sort((a, b) => a.hits - b.hits);
-      const targetId = targets[0].id;
-      (creep.memory as CreepMemory).repaierTargetId = targetId;
-      creep.say("🔧 repaier");
-    }
-
-    if ((creep.memory as CreepMemory).repaiering) {
-      if ((creep.memory as CreepMemory).repaierTargetId) {
-        const targets: Structure<StructureConstant>[] = [];
-        targets.push(
-          Game.getObjectById(
-            (creep.memory as CreepMemory).repaierTargetId
-          ) as Structure<StructureConstant>
-        );
-        if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-          // TODO: Creepの動作状態をMemoryに保存
-          creep.moveTo(targets[0], {
-            visualizePathStyle: { stroke: "#ffffff" },
-          });
+    switch (isRepaiering(creep)) {
+      case true:
+        if (isCreepStoreEmpty(creep)) {
+          memoryManager.refreshMemory(creep);
+          (creep.memory as CreepMemory).repaiering = false;
+          const randTargetId = findTarget.randomSourcesFind(creep);
+          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+          creep.say("🔄 harvest");
+          break;
         }
-        if (targets[0].hits == targets[0].hitsMax) {
+
+        if ((creep.memory as CreepMemory).repaierTargetId) {
+          const targets: Structure<StructureConstant>[] = [];
+          targets.push(
+            Game.getObjectById(
+              (creep.memory as CreepMemory).repaierTargetId
+            ) as Structure<StructureConstant>
+          );
+          if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+            // TODO: Creepの動作状態をMemoryに保存
+            creep.moveTo(targets[0], {
+              visualizePathStyle: { stroke: "#ffffff" },
+            });
+          }
+          if (targets[0].hits == targets[0].hitsMax) {
+            const targets = creep.room.find(FIND_STRUCTURES, {
+              filter: (object) => object.hits < object.hitsMax,
+            });
+            targets.sort((a, b) => a.hits - b.hits);
+            (creep.memory as CreepMemory).repaierTargetId = targets[0].id;
+          }
+        } else {
           const targets = creep.room.find(FIND_STRUCTURES, {
             filter: (object) => object.hits < object.hitsMax,
           });
           targets.sort((a, b) => a.hits - b.hits);
-          (creep.memory as CreepMemory).repaierTargetId = targets[0].id;
+          if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+            // TODO: Creepの動作状態をMemoryに保存
+            creep.moveTo(targets[0], {
+              visualizePathStyle: { stroke: "#ffffff" },
+            });
+          }
         }
-      } else {
-        const targets = creep.room.find(FIND_STRUCTURES, {
-          filter: (object) => object.hits < object.hitsMax,
-        });
-        targets.sort((a, b) => a.hits - b.hits);
-        if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-          // TODO: Creepの動作状態をMemoryに保存
-          creep.moveTo(targets[0], {
-            visualizePathStyle: { stroke: "#ffffff" },
+        break;
+
+      case false:
+        if (isCreepStoreFull(creep)) {
+          memoryManager.refreshMemory(creep);
+          (creep.memory as CreepMemory).repaiering = true;
+          const targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (object) => object.hits < object.hitsMax,
           });
+          targets.sort((a, b) => a.hits - b.hits);
+          const targetId = targets[0].id;
+          (creep.memory as CreepMemory).repaierTargetId = targetId;
+          creep.say("🔧 repaier");
         }
-      }
-    } else {
-      // TODO: Creepの動作状態をMemoryに保存
-      actionHarvest.run(creep);
+
+        // TODO: Creepの動作状態をMemoryに保存
+        actionHarvest.run(creep);
     }
   },
 };
