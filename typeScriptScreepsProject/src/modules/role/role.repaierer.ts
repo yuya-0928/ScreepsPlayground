@@ -2,17 +2,17 @@ import { findTarget } from "../findTarget";
 import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
+import { isCreepStoreEmpty, isCreepStoreFull } from "../check/check.store";
 
 const isRepaiering = (creep: Creep) => {
   return (creep.memory as CreepMemory).repaiering;
 };
 
 export const roleRepaierer = {
-  /** @param {Creep} creep **/
   run: function (creep: Creep) {
     (creep.memory as CreepMemory).roleAs = "repaierer";
 
-    if (isRepaiering(creep) && creep.store[RESOURCE_ENERGY] == 0) {
+    if (isRepaiering(creep) && isCreepStoreEmpty(creep)) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).repaiering = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
@@ -20,7 +20,7 @@ export const roleRepaierer = {
       creep.say("🔄 harvest");
     }
 
-    if (!isRepaiering(creep) && creep.store.getFreeCapacity() == 0) {
+    if (!isRepaiering(creep) && isCreepStoreFull(creep)) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).repaiering = true;
       const targets = creep.room.find(FIND_STRUCTURES, {
