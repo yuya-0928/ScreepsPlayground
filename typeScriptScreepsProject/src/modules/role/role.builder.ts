@@ -14,6 +14,7 @@ export const roleBuilder = {
       (creep.memory as CreepMemory).building = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
       (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+      (creep.memory as CreepMemory).roleAs = "builder";
       creep.say("🔄 harvest");
     }
     if (
@@ -22,6 +23,7 @@ export const roleBuilder = {
     ) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).building = true;
+      (creep.memory as CreepMemory).roleAs = "builder";
       creep.say("🚧 build");
     }
 
@@ -29,12 +31,14 @@ export const roleBuilder = {
       let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
       if (targets.length) {
         if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+          // TODO: Creepの動作状態をMemoryに保存
           creep.moveTo(targets[0], {
             visualizePathStyle: { stroke: "#ffffff" },
           });
         }
       }
     } else {
+      // TODO: Creepの動作状態をMemoryに保存
       actionHarvest.run(creep);
     }
   },

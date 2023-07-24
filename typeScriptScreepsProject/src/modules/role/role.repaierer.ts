@@ -14,6 +14,7 @@ export const roleRepaierer = {
       (creep.memory as CreepMemory).repaiering = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
       (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+      (creep.memory as CreepMemory).roleAs = "repaierer";
       creep.say("🔄 harvest");
     }
 
@@ -29,6 +30,7 @@ export const roleRepaierer = {
       targets.sort((a, b) => a.hits - b.hits);
       const targetId = targets[0].id;
       (creep.memory as CreepMemory).repaierTargetId = targetId;
+      (creep.memory as CreepMemory).roleAs = "repaierer";
       creep.say("🔧 repaier");
     }
 
@@ -41,6 +43,7 @@ export const roleRepaierer = {
           ) as Structure<StructureConstant>
         );
         if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+          // TODO: Creepの動作状態をMemoryに保存
           creep.moveTo(targets[0], {
             visualizePathStyle: { stroke: "#ffffff" },
           });
@@ -58,12 +61,14 @@ export const roleRepaierer = {
         });
         targets.sort((a, b) => a.hits - b.hits);
         if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+          // TODO: Creepの動作状態をMemoryに保存
           creep.moveTo(targets[0], {
             visualizePathStyle: { stroke: "#ffffff" },
           });
         }
       }
     } else {
+      // TODO: Creepの動作状態をMemoryに保存
       actionHarvest.run(creep);
     }
   },
