@@ -9,36 +9,58 @@ const isUpgrading = (creep: Creep) => {
 };
 
 export const roleUpgrader = {
-  /** @param {Creep} creep **/
   run: function (creep: Creep) {
-    if (isUpgrading(creep) && isCreepStoreEmpty(creep)) {
-      memoryManager.refreshMemory(creep);
-      (creep.memory as CreepMemory).upgrading = false;
-      const randTargetId = findTarget.randomSourcesFind(creep);
-      (creep.memory as CreepMemory).harvestTargetId = randTargetId;
-      (creep.memory as CreepMemory).roleAs = "upgrader";
-      creep.say("🔄 harvest");
-    }
-    if (!isUpgrading(creep) && isCreepStoreFull(creep)) {
-      memoryManager.refreshMemory(creep);
-      (creep.memory as CreepMemory).upgrading = true;
-      (creep.memory as CreepMemory).roleAs = "upgrader";
-      creep.say("⚡ upgrade");
-    }
+    // TODO: Creepが作りたての状態を考慮できていないため、roleのみが設定された状態のCreepの扱いを決める
+    switch (isUpgrading(creep)) {
+      case true:
+        if (isCreepStoreEmpty(creep)) {
+          memoryManager.refreshMemory(creep);
+          (creep.memory as CreepMemory).upgrading = false;
+          const randTargetId = findTarget.randomSourcesFind(creep);
+          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+          (creep.memory as CreepMemory).roleAs = "upgrader";
+          creep.say("🔄 harvest");
+        }
 
-    if (isUpgrading(creep)) {
-      if (
-        creep.room.controller &&
-        creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE
-      ) {
+        if (creep.room.controller) {
+          if (
+            creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE
+          ) {
+            // TODO: Creepの動作状態をMemoryに保存
+            creep.moveTo(creep.room.controller, {
+              visualizePathStyle: { stroke: "#ffffff" },
+            });
+            break;
+          }
+
+          creep.upgradeController(creep.room.controller);
+          break;
+        }
+        break;
+
+      case false:
+        if (isCreepStoreFull(creep)) {
+          memoryManager.refreshMemory(creep);
+          (creep.memory as CreepMemory).upgrading = true;
+          (creep.memory as CreepMemory).roleAs = "upgrader";
+          creep.say("⚡ upgrade");
+        }
+
         // TODO: Creepの動作状態をMemoryに保存
-        creep.moveTo(creep.room.controller, {
-          visualizePathStyle: { stroke: "#ffffff" },
-        });
-      }
-    } else {
-      // TODO: Creepの動作状態をMemoryに保存
-      actionHarvest.run(creep);
+        actionHarvest.run(creep);
+        break;
+
+      case undefined:
+        // TODO: Creepが作りたての状態が決まったら削除する
+        if (isCreepStoreEmpty(creep)) {
+          memoryManager.refreshMemory(creep);
+          (creep.memory as CreepMemory).upgrading = false;
+          const randTargetId = findTarget.randomSourcesFind(creep);
+          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+          (creep.memory as CreepMemory).roleAs = "upgrader";
+          creep.say("🔄 harvest");
+        }
+        break;
     }
   },
 };
