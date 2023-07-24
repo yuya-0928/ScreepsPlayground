@@ -1,5 +1,5 @@
 import { findTarget } from "../findTarget";
-import { actionHarvest } from "../action.harvest";
+import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
 
