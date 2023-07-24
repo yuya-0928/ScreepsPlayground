@@ -35,16 +35,6 @@ export const roleBuilder = {
         break;
 
       case false:
-        // TODO: Creepが作りたての状態が決まったら削除する
-        if (isCreepStoreEmpty(creep)) {
-          memoryManager.refreshMemory(creep);
-          const randTargetId = findTarget.randomSourcesFind(creep);
-          (creep.memory as CreepMemory).building = false;
-          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
-          creep.say("🔄 harvest");
-          break;
-        }
-
         if (isCreepStoreFull(creep)) {
           memoryManager.refreshMemory(creep);
           (creep.memory as CreepMemory).building = true;
@@ -54,6 +44,18 @@ export const roleBuilder = {
 
         // TODO: Creepの動作状態をMemoryに保存
         actionHarvest.run(creep);
+        break;
+
+      case undefined:
+        // TODO: Creepが作りたての状態が決まったら削除する
+        if (isCreepStoreEmpty(creep)) {
+          memoryManager.refreshMemory(creep);
+          const randTargetId = findTarget.randomSourcesFind(creep);
+          (creep.memory as CreepMemory).building = false;
+          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+          creep.say("🔄 harvest");
+          break;
+        }
         break;
     }
   },

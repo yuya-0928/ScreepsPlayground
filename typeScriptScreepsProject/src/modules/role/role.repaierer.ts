@@ -65,16 +65,6 @@ export const roleRepaierer = {
         }
 
       case false:
-        // TODO: Creepが作りたての状態が決まったら削除する
-        if (isCreepStoreEmpty(creep)) {
-          memoryManager.refreshMemory(creep);
-          (creep.memory as CreepMemory).repaiering = false;
-          const randTargetId = findTarget.randomSourcesFind(creep);
-          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
-          creep.say("🔄 harvest");
-          break;
-        }
-
         if (isCreepStoreFull(creep)) {
           memoryManager.refreshMemory(creep);
           (creep.memory as CreepMemory).repaiering = true;
@@ -85,6 +75,17 @@ export const roleRepaierer = {
 
         // TODO: Creepの動作状態をMemoryに保存
         actionHarvest.run(creep);
+
+      case undefined:
+        // TODO: Creepが作りたての状態が決まったら削除する
+        if (isCreepStoreEmpty(creep)) {
+          memoryManager.refreshMemory(creep);
+          (creep.memory as CreepMemory).repaiering = false;
+          const randTargetId = findTarget.randomSourcesFind(creep);
+          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+          creep.say("🔄 harvest");
+        }
+        break;
     }
   },
 };
