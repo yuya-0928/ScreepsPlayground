@@ -2,6 +2,7 @@ import { findTarget } from "../findTarget";
 import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
+import { isCreepStoreEmpty, isCreepStoreFull } from "../check/check.store";
 
 const isHarvesting = (creep: Creep) => {
   return (creep.memory as CreepMemory).refueling;
@@ -9,7 +10,7 @@ const isHarvesting = (creep: Creep) => {
 
 export const roleHarvester = {
   run: function (creep: Creep) {
-    if (isHarvesting(creep) && creep.store[RESOURCE_ENERGY] == 0) {
+    if (isHarvesting(creep) && isCreepStoreEmpty(creep)) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).refueling = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
@@ -18,17 +19,14 @@ export const roleHarvester = {
       creep.say("🔄 harvest");
     }
 
-    if (
-      !isHarvesting(creep) &&
-      creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0
-    ) {
+    if (!isHarvesting(creep) && isCreepStoreFull(creep)) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).refueling = true;
       (creep.memory as CreepMemory).roleAs = "harvester";
       creep.say("⛽ refuel");
     }
 
-    if ((creep.memory as CreepMemory).refueling) {
+    if (isHarvesting(creep)) {
       const targets = findTarget.filling(creep);
       if (targets.length > 0) {
         // TODO: Creepの動作状態をMemoryに保存
