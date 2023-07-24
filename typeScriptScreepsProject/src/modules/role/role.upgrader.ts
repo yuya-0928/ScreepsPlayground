@@ -14,6 +14,7 @@ export const roleUpgrader = {
       (creep.memory as CreepMemory).upgrading = false;
       const randTargetId = findTarget.randomSourcesFind(creep);
       (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+      (creep.memory as CreepMemory).roleAs = "upgrader";
       creep.say("🔄 harvest");
     }
     if (
@@ -22,6 +23,7 @@ export const roleUpgrader = {
     ) {
       memoryManager.refreshMemory(creep);
       (creep.memory as CreepMemory).upgrading = true;
+      (creep.memory as CreepMemory).roleAs = "upgrader";
       creep.say("⚡ upgrade");
     }
 
