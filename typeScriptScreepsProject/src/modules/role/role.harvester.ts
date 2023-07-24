@@ -9,6 +9,10 @@ const isHarvesting = (creep: Creep) => {
   return (creep.memory as CreepMemory).refueling;
 };
 
+const isHarvestingTargetIdExistInMemory = (creep: Creep) => {
+  return (creep.memory as CreepMemory).harvestTargetId !== undefined;
+};
+
 export const roleHarvester = {
   run: function (creep: Creep) {
     (creep.memory as CreepMemory).roleAs = "harvester";
@@ -35,16 +39,6 @@ export const roleHarvester = {
         break;
 
       case false:
-        // TODO: Creepが作りたての状態が決まったら削除する
-        if (isCreepStoreEmpty(creep)) {
-          memoryManager.refreshMemory(creep);
-          (creep.memory as CreepMemory).refueling = false;
-          const randTargetId = findTarget.randomSourcesFind(creep);
-          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
-          creep.say("🔄 harvest");
-          break;
-        }
-
         if (isCreepStoreFull(creep)) {
           memoryManager.refreshMemory(creep);
           (creep.memory as CreepMemory).refueling = true;
@@ -54,6 +48,20 @@ export const roleHarvester = {
 
         // TODO: Creepの動作状態をMemoryに保存
         actionHarvest.run(creep);
+        break;
+
+      case undefined:
+        // TODO: Creepが作りたての状態が決まったら削除する
+        if (
+          isCreepStoreEmpty(creep) &&
+          !isHarvestingTargetIdExistInMemory(creep)
+        ) {
+          memoryManager.refreshMemory(creep);
+          (creep.memory as CreepMemory).refueling = false;
+          const randTargetId = findTarget.randomSourcesFind(creep);
+          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+          creep.say("🔄 harvest");
+        }
         break;
     }
   },
