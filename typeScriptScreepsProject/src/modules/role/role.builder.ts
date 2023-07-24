@@ -13,6 +13,7 @@ export const roleBuilder = {
   run: (creep: Creep) => {
     (creep.memory as CreepMemory).roleAs = "builder";
 
+    // TODO: Creepが作りたての状態を考慮できていないため、roleのみが設定された状態のCreepの扱いを決める
     switch (isBuilding(creep)) {
       case true:
         if (isCreepStoreEmpty(creep)) {
@@ -34,6 +35,16 @@ export const roleBuilder = {
         break;
 
       case false:
+        // TODO: Creepが作りたての状態が決まったら削除する
+        if (isCreepStoreEmpty(creep)) {
+          memoryManager.refreshMemory(creep);
+          const randTargetId = findTarget.randomSourcesFind(creep);
+          (creep.memory as CreepMemory).building = false;
+          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
+          creep.say("🔄 harvest");
+          break;
+        }
+
         if (isCreepStoreFull(creep)) {
           memoryManager.refreshMemory(creep);
           (creep.memory as CreepMemory).building = true;
