@@ -3,6 +3,7 @@ import { actionHarvest } from "../action/action.harvest";
 import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
 import { isCreepStoreEmpty, isCreepStoreFull } from "../check/check.store";
+import { actionMove } from "../action/action.move";
 
 const isUpgrading = (creep: Creep) => {
   return (creep.memory as CreepMemory).upgrading;
@@ -27,9 +28,7 @@ export const roleUpgrader = {
             creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE
           ) {
             // TODO: Creepの動作状態をMemoryに保存
-            creep.moveTo(creep.room.controller, {
-              visualizePathStyle: { stroke: "#ffffff" },
-            });
+            actionMove(creep, creep.room.controller);
             break;
           }
 
