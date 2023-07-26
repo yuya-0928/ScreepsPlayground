@@ -5,12 +5,12 @@ import { logger } from "./modules/logger";
 import { findTarget } from "./modules/findTarget";
 import { spawnRepaierer } from "./modules/spawn/spawn.repaierer";
 import { deleteDeadCreepMemory } from "./modules/deleteDeadCreepMemory";
-import { filter } from "lodash";
 import { roleHarvester } from "./modules/role/role.harvester";
 import { spawnHarvester } from "./modules/spawn/spawn.harvester";
 import { spawnBuilder } from "./modules/spawn/spawn.builder";
 import { roleUpgrader } from "./modules/role/role.upgrader";
 import { roleRepaierer } from "./modules/role/role.repaierer";
+import { findCreepsByRole } from "./modules/find/findCreepsByRole";
 
 export interface CreepMemory {
   [key: string]: any;
@@ -24,13 +24,6 @@ export interface CreepMemory {
 }
 
 deleteDeadCreepMemory();
-
-const findCreepsByRole = (role: string) => {
-  return filter(
-    Game.creeps,
-    (creep: Creep) => (creep.memory as CreepMemory).role == role
-  );
-};
 
 const spawnerStatus = {
   show: function (spawn: StructureSpawn) {
