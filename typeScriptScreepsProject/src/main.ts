@@ -13,6 +13,7 @@ import { roleRepaierer } from "./modules/role/role.repaierer";
 import { findCreepsByRole } from "./modules/find/findCreepsByRole";
 import { spawnTransporter } from "./modules/spawn/spawn.transporter";
 import { roleTransporter } from "./modules/role/role.transporter";
+import { spawnerStatus } from "./modules/spawnerStatus";
 
 export interface CreepMemory {
   [key: string]: any;
@@ -26,20 +27,6 @@ export interface CreepMemory {
 }
 
 deleteDeadCreepMemory();
-
-const spawnerStatus = {
-  show: function (spawn: StructureSpawn) {
-    if (spawn.spawning) {
-      const spawningCreep = Game.creeps[spawn.spawning.name];
-      spawn.room.visual.text(
-        "🛠️" + (spawningCreep.memory as CreepMemory).role,
-        spawn.pos.x + 1,
-        spawn.pos.y,
-        { align: "left", opacity: 0.8 }
-      );
-    }
-  },
-};
 
 module.exports.loop = function () {
   const harvesters = findCreepsByRole("harvester");
