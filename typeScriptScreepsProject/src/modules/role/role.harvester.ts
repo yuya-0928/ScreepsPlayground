@@ -30,10 +30,14 @@ export const roleHarvester = {
         }
 
         const targets = findTarget.filling(creep);
+        const closestTarget = creep.pos.findClosestByPath(targets);
         if (targets.length > 0) {
+        if (closestTarget) {
           // TODO: Creepの動作状態をMemoryに保存
-          if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            actionMove(creep, targets[0]);
+          if (
+            creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+          ) {
+            actionMove(creep, closestTarget);
           }
         }
         break;
