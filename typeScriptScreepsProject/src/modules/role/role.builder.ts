@@ -4,10 +4,15 @@ import { memoryManager } from "../memoryManager";
 import { CreepMemory } from "../../main";
 import { actionMove } from "../action/action.move";
 import { isCreepStoreEmpty, isCreepStoreFull } from "../check/check.store";
+import { findContainers } from "../find/findContainers";
+import { withdrowEnegy } from "../action/withdrowEnegy";
 
 const isBuilding = (creep: Creep) => {
   return (creep.memory as CreepMemory).building;
 };
+
+const getCurrentContainerId = (creep: Creep) =>
+  (creep.memory as CreepMemory).containerId;
 
 export const roleBuilder = {
   run: (creep: Creep) => {
@@ -42,8 +47,24 @@ export const roleBuilder = {
           break;
         }
 
-        // TODO: Creepの動作状態をMemoryに保存
-        actionHarvest.run(creep);
+        let target: AnyStructure | null = null;
+        if (getCurrentContainerId(creep)) {
+          target = Game.getObjectById(
+            getCurrentContainerId(creep)
+          ) as AnyStructure;
+        } else {
+          const targets = findContainers(creep);
+          if (targets.length > 0) {
+            (creep.memory as CreepMemory).withdrowTargetId = targets[0].id;
+            target = targets[0];
+          } else {
+            // TODO: エナジーが入ったコンテナがない場合の処理を書く
+            break;
+          }
+        }
+
+        // コンテナからエナジーを取得する
+        withdrowEnegy(creep);
         break;
 
       case undefined:
