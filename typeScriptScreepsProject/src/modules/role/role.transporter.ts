@@ -32,23 +32,25 @@ export const roleTransporter = (creep: Creep) => {
       // TODO: エナジーをSpawnerやExtensionに運ぶ
       const spawners = findSpawners(creep);
       const extensions = findExtensions(creep);
-      const targets = spawners.concat(extensions);
-
-      const sorted_targets = targets
+      const sorted_extensions = extensions
         .filter(hasStore)
-        .filter((target) => {
-          return target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-        })
         .sort(
           (a, b) =>
-            b.store.getFreeCapacity(RESOURCE_ENERGY) -
-            a.store.getFreeCapacity(RESOURCE_ENERGY)
+            a.store.getFreeCapacity(RESOURCE_ENERGY) -
+            b.store.getFreeCapacity(RESOURCE_ENERGY)
         );
-      if (sorted_targets.length > 0) {
+      const targets = spawners.concat(sorted_extensions);
+
+      const filtered_targets = targets.filter(hasStore).filter((target) => {
+        return target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+      });
+
+      if (filtered_targets.length > 0) {
         if (
-          creep.transfer(sorted_targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+          creep.transfer(filtered_targets[0], RESOURCE_ENERGY) ==
+          ERR_NOT_IN_RANGE
         ) {
-          actionMove(creep, sorted_targets[0]);
+          actionMove(creep, filtered_targets[0]);
         }
       }
       break;
