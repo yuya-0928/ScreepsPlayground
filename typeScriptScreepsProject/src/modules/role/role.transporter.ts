@@ -34,19 +34,21 @@ export const roleTransporter = (creep: Creep) => {
       const extensions = findExtensions(creep);
       const targets = spawners.concat(extensions);
 
-      targets
+      const sorted_targets = targets
         .filter(hasStore)
         .filter((target) => {
-          target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+          return target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
         })
         .sort(
           (a, b) =>
-            a.store.getFreeCapacity(RESOURCE_ENERGY) -
-            b.store.getFreeCapacity(RESOURCE_ENERGY)
+            b.store.getFreeCapacity(RESOURCE_ENERGY) -
+            a.store.getFreeCapacity(RESOURCE_ENERGY)
         );
-      if (targets.length > 0) {
-        if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          actionMove(creep, targets[0]);
+      if (sorted_targets.length > 0) {
+        if (
+          creep.transfer(sorted_targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+        ) {
+          actionMove(creep, sorted_targets[0]);
         }
       }
       break;
