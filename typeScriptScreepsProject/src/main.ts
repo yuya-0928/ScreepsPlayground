@@ -11,6 +11,8 @@ import { spawnBuilder } from "./modules/spawn/spawn.builder";
 import { roleUpgrader } from "./modules/role/role.upgrader";
 import { roleRepaierer } from "./modules/role/role.repaierer";
 import { findCreepsByRole } from "./modules/find/findCreepsByRole";
+import { spawnTransporter } from "./modules/spawn/spawn.transporter";
+import { roleTransporter } from "./modules/role/role.transporter";
 
 export interface CreepMemory {
   [key: string]: any;
@@ -45,9 +47,18 @@ module.exports.loop = function () {
     spawnHarvester.run(Game.spawns["Spawn1"]);
   }
 
+  const transporters = findCreepsByRole("transporter");
+  if (
+    harvesters.length == managementCreepCount.harvester &&
+    transporters.length < managementCreepCount.transporter
+  ) {
+    spawnTransporter.run(Game.spawns["Spawn1"]);
+  }
+
   const upgraders = findCreepsByRole("upgrader");
   if (
     harvesters.length == managementCreepCount.harvester &&
+    transporters.length == managementCreepCount.transporter &&
     upgraders.length < managementCreepCount.upgrader
   ) {
     spawnUpgrader.run(Game.spawns["Spawn1"]);
@@ -56,6 +67,7 @@ module.exports.loop = function () {
   const builders = findCreepsByRole("builder");
   if (
     harvesters.length == managementCreepCount.harvester &&
+    transporters.length == managementCreepCount.transporter &&
     upgraders.length == managementCreepCount.upgrader &&
     builders.length < managementCreepCount.builder
   ) {
@@ -65,6 +77,7 @@ module.exports.loop = function () {
   const repaierers = findCreepsByRole("repaierer");
   if (
     harvesters.length == managementCreepCount.harvester &&
+    transporters.length == managementCreepCount.transporter &&
     upgraders.length == managementCreepCount.upgrader &&
     builders.length == managementCreepCount.builder &&
     repaierers.length < managementCreepCount.repaierer
@@ -84,6 +97,11 @@ module.exports.loop = function () {
         } else {
           roleHarvester.run(creep);
         }
+        break;
+      }
+
+      case "transporter": {
+        roleTransporter(creep);
         break;
       }
 
