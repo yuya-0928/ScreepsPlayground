@@ -29,7 +29,7 @@ export const roleTransporter = (creep: Creep) => {
         break;
       }
 
-      // TODO: エナジーをSpawnerやExtensionに運ぶ
+      // TODO: 運び先がMaxだったら、コンテナに戻す
       const spawners = findSpawners(creep);
       const extensions = findExtensions(creep);
       const sorted_extensions = extensions

@@ -20,6 +20,7 @@ export const roleBuilder = {
 
     // TODO: Creepが作りたての状態を考慮できていないため、roleのみが設定された状態のCreepの扱いを決める
     switch (isBuilding(creep)) {
+      // TODO: true, falseから具体的な状態名にする
       case true:
         if (isCreepStoreEmpty(creep)) {
           memoryManager.refreshMemory(creep);
@@ -63,7 +64,6 @@ export const roleBuilder = {
           }
         }
 
-        // コンテナからエナジーを取得する
         withdrowEnegy(creep);
         break;
 
