@@ -1,6 +1,6 @@
 import { caluclateCreepCost } from "../managementCreep";
 import { creepStatus } from "../managementCreep";
-import { findTarget } from "./findTarget";
+import { findSourceBuildingCreep } from "./find/findSourceBuildingCreep";
 
 export const logger = {
   creepCountInfo: (
@@ -30,8 +30,6 @@ export const logger = {
   },
 
   sourceCountBuildingCreep: () => {
-    console.log(
-      "sourceCountBuildingCreep: " + findTarget.sourceBuildingCreep()
-    );
+    console.log("sourceCountBuildingCreep: " + findSourceBuildingCreep());
   },
 };
