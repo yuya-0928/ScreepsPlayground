@@ -13,12 +13,15 @@ const isHarvestingTargetIdExistInMemory = (creep: Creep) => {
   return (creep.memory as CreepMemory).harvestTargetId !== undefined;
 };
 
+// TODO: harvesterがharvestする場所を固定にする
+// TODO: harvestTargetIdをMemoryに保存する処理をaction.harvest.tsに移動する
 export const roleHarvester = {
   run: function (creep: Creep) {
     (creep.memory as CreepMemory).roleAs = "harvester";
 
     // TODO: Creepが作りたての状態を考慮できていないため、roleのみが設定された状態のCreepの扱いを決める
     switch (isHarvesting(creep)) {
+      // TODO: true, falseから具体的な状態名にする
       case true:
         if (isCreepStoreEmpty(creep)) {
           memoryManager.refreshMemory(creep);
@@ -29,9 +32,11 @@ export const roleHarvester = {
           break;
         }
 
+        // TODO: Mapにコンテナが存在しなかったら、SpawnerやExtensionに運ぶ
+
+        // TODO: fillingを使わずに、findContainersを使う
         const targets = findTarget.filling(creep);
         const closestTarget = creep.pos.findClosestByPath(targets);
-        if (targets.length > 0) {
         if (closestTarget) {
           // TODO: Creepの動作状態をMemoryに保存
           if (

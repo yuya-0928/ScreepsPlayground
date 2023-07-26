@@ -29,6 +29,8 @@ export interface CreepMemory {
 deleteDeadCreepMemory();
 
 module.exports.loop = function () {
+  // TODO: Creep生成の優先順位を決定するコードを書く
+  // TODO: spawnManager.tsを作成し、Creep生成のコードを移動する。
   const harvesters = findCreepsByRole("harvester");
   if (harvesters.length < managementCreepCount.harvester) {
     spawnHarvester.run(Game.spawns["Spawn1"]);
@@ -74,6 +76,7 @@ module.exports.loop = function () {
 
   spawnerStatus.show(Game.spawns["Spawn1"]);
 
+  // TODO: spawnManager.tsを作成し、Creep生成のコードを移動する。
   for (let name in Game.creeps) {
     const creep = Game.creeps[name];
     switch ((creep.memory as CreepMemory).role) {
@@ -141,6 +144,8 @@ module.exports.loop = function () {
       }
 
       case "healer": {
+        // TODO: SourceのIDを指定して、同時採掘可能な分のCreep数だけ割り当てる
+        // TODO: Mapから、Sourceを取得し、同時採掘可能なCreep数を割り出す
         const targets = creep.room.find(FIND_HOSTILE_CREEPS);
         if (targets.length) {
           if (creep.attack(targets[0]) == ERR_NOT_IN_RANGE) {

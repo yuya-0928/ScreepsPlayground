@@ -18,6 +18,7 @@ export const roleUpgrader = {
   run: function (creep: Creep) {
     // TODO: Creepが作りたての状態を考慮できていないため、roleのみが設定された状態のCreepの扱いを決める
     switch (isUpgrading(creep)) {
+      // TODO: true, falseから具体的な状態名にする
       case true:
         if (isCreepStoreEmpty(creep)) {
           memoryManager.refreshMemory(creep);

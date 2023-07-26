@@ -1,6 +1,8 @@
 import { findTarget } from "../findTarget";
 import { CreepMemory } from "../../main";
 
+// TODO: harvesterがharvestする場所を決定するための処理を書く
+// TODO: sorceに対して何体のharvesterが稼働しているか確認してから、harvestする場所を決定する
 export const actionHarvest = {
   run: function (creep: Creep) {
     if ((creep.memory as CreepMemory).harvestTargetId) {
