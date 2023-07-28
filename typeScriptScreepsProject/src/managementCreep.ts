@@ -1,7 +1,8 @@
 import { creepCosts } from './creepCosts';
 
 export const managementCreepCount = {
-  harvester: 3,
+  // TODO: 同時採掘可能なharvesterの数を割り当てるようにする
+  harvester: 4,
   transporter: 3,
   upgrader: 3,
   builder: 3,
