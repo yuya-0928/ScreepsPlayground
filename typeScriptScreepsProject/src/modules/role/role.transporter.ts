@@ -13,6 +13,7 @@ const hasStore = (target: AnyStructure): target is StructureStorage => {
   return 'store' in target;
 };
 
+// TODO: 死んだCreepや放置されたEnergyを拾うようにする
 export const roleTransporter = (creep: Creep) => {
   switch (isTransporting(creep)) {
     case 'transporting':
