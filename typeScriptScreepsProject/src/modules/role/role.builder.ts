@@ -1,7 +1,5 @@
-import { findTarget } from '../findTarget';
 import { memoryManager } from '../memoryManager';
 import { CreepMemory } from '../../main';
-import { actionMove } from '../action/action.move';
 import { isCreepStoreEmpty, isCreepStoreFull } from '../check/check.store';
 import { withdrowEnegy } from '../action/withdrowEnegy';
 import { findCreepsByRole } from '../find/findCreepsByRole';
@@ -9,6 +7,7 @@ import { minimumHarvesterCount } from '../../managementCreep';
 import { roleHarvester } from './role.harvester';
 import { roleRepaierer } from './role.repaierer';
 import { roleUpgrader } from './role.upgrader';
+import { actionBuild } from '../action/actionBuild';
 
 const isBuilding = (creep: Creep) => {
   return (creep.memory as CreepMemory).building;
@@ -47,13 +46,7 @@ export const roleBuilder = {
           break;
         }
 
-        let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-        if (targets.length) {
-          if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-            // TODO: Creepの動作状態をMemoryに保存
-            actionMove(creep, targets[0]);
-          }
-        }
+        actionBuild(creep);
         break;
 
       case false:
@@ -69,12 +62,9 @@ export const roleBuilder = {
 
       case undefined:
         // TODO: Creepが作りたての状態が決まったら削除する
-        if (isCreepStoreEmpty(creep)) {
-          memoryManager.refreshMemory(creep);
-          (creep.memory as CreepMemory).building = false;
-          creep.say('🔄 harvest');
-          break;
-        }
+        memoryManager.refreshMemory(creep);
+        (creep.memory as CreepMemory).building = false;
+        creep.say('🔄 harvest');
         break;
     }
   },
