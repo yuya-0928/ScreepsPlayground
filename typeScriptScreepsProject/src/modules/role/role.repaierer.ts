@@ -1,23 +1,12 @@
 import { memoryManager } from '../memoryManager';
 import { CreepMemory } from '../../main';
 import { isCreepStoreEmpty, isCreepStoreFull } from '../check/check.store';
-import { actionMove } from '../action/action.move';
 import { withdrowEnegy } from '../action/withdrowEnegy';
+import { actionRepair } from '../action/actionRepaier';
+import { findLowestHitsTarget } from '../find/findLowestHitsTarget';
 
 const isRepaiering = (creep: Creep) => {
   return (creep.memory as CreepMemory).repaiering;
-};
-
-const isRepaierTargetIdExistInMemory = (creep: Creep) => {
-  return (creep.memory as CreepMemory).repaierTargetId !== undefined;
-};
-
-const findLowestHitsTarget = (creep: Creep) => {
-  const targets = creep.room.find(FIND_STRUCTURES, {
-    filter: (object) => object.hits < object.hitsMax,
-  });
-  targets.sort((a, b) => a.hits - b.hits);
-  return targets[0];
 };
 
 export const roleRepaierer = {
@@ -34,33 +23,8 @@ export const roleRepaierer = {
           break;
         }
 
-        switch (isRepaierTargetIdExistInMemory(creep)) {
-          case true:
-            const targetInMemory = Game.getObjectById(
-              (creep.memory as CreepMemory).repaierTargetId
-            ) as Structure<StructureConstant>;
-
-            if (targetInMemory.hits == targetInMemory.hitsMax) {
-              const lowestHitsTarget = findLowestHitsTarget(creep);
-              (creep.memory as CreepMemory).repaierTargetId =
-                lowestHitsTarget.id;
-              break;
-            }
-
-            if (creep.repair(targetInMemory) === ERR_NOT_IN_RANGE) {
-              // TODO: Creepの動作状態をMemoryに保存
-              actionMove(creep, targetInMemory);
-              break;
-            }
-
-            creep.repair(targetInMemory);
-            break;
-
-          case false:
-            const lowestHitsTarget = findLowestHitsTarget(creep);
-            (creep.memory as CreepMemory).repaierTargetId = lowestHitsTarget.id;
-            break;
-        }
+        actionRepair(creep);
+        break;
 
       case 'fillingEnegy':
         if (isCreepStoreFull(creep)) {
@@ -69,6 +33,7 @@ export const roleRepaierer = {
           const lowestHitsTarget = findLowestHitsTarget(creep);
           (creep.memory as CreepMemory).repaierTargetId = lowestHitsTarget.id;
           creep.say('🔧 repaier');
+          break;
         }
 
         // TODO: Creepの動作状態をMemoryに保存
