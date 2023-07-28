@@ -21,7 +21,7 @@ export interface CreepMemory {
   refueling: boolean;
   upgrading?: boolean;
   building?: boolean;
-  repaiering?: boolean;
+  repaiering?: string;
   repaierTargetId: string;
 }
 
