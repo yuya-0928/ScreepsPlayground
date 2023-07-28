@@ -1,5 +1,6 @@
 import { findExtensions } from '../find/findExtensions';
 import { findSpawners } from '../find/findSpawners';
+import { findTowers } from '../find/findTowers';
 import { actionMove } from './action.move';
 
 const hasStore = (target: AnyStructure): target is StructureStorage => {
@@ -11,6 +12,7 @@ export const actionTransport = (creep: Creep) => {
   // TODO: 運び先がMaxだったら、コンテナに戻す
   const spawners = findSpawners(creep);
   const extensions = findExtensions(creep);
+  const towers = findTowers(creep);
   const sorted_extensions = extensions
     .filter(hasStore)
     .sort(
@@ -18,7 +20,7 @@ export const actionTransport = (creep: Creep) => {
         a.store.getFreeCapacity(RESOURCE_ENERGY) -
         b.store.getFreeCapacity(RESOURCE_ENERGY)
     );
-  const targets = spawners.concat(sorted_extensions);
+  const targets = spawners.concat(sorted_extensions, towers);
 
   const filtered_targets = targets.filter(hasStore).filter((target) => {
     return target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
