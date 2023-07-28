@@ -1,18 +1,23 @@
-import { findTarget } from '../findTarget';
 import { actionHarvest } from '../action/action.harvest';
 import { memoryManager } from '../memoryManager';
 import { CreepMemory } from '../../main';
 import { isCreepStoreEmpty, isCreepStoreFull } from '../check/check.store';
 import { roleUpgrader } from './role.upgrader';
 import { actionRefuel } from '../action/actionRefuel';
+import { findSpawners } from '../find/findSpawners';
+import { findExtensions } from '../find/findExtensions';
+import { findTowers } from '../find/findTowers';
 
 const isHarvesting = (creep: Creep) => {
   return (creep.memory as CreepMemory).refueling;
 };
 
 const settingRole = (creep: Creep) => {
-  const harvestingTargets = findTarget.filling(creep);
-  if (harvestingTargets.length === 0) {
+  const spawners = findSpawners(creep);
+  const extensions = findExtensions(creep);
+  const towers = findTowers(creep);
+  const targets = spawners.concat(extensions, towers);
+  if (targets.length === 0) {
     roleUpgrader.run(creep);
   } else {
     return;
