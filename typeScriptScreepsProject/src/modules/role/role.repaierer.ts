@@ -1,9 +1,9 @@
-import { findTarget } from "../findTarget";
-import { actionHarvest } from "../action/action.harvest";
-import { memoryManager } from "../memoryManager";
-import { CreepMemory } from "../../main";
-import { isCreepStoreEmpty, isCreepStoreFull } from "../check/check.store";
-import { actionMove } from "../action/action.move";
+import { memoryManager } from '../memoryManager';
+import { CreepMemory } from '../../main';
+import { isCreepStoreEmpty, isCreepStoreFull } from '../check/check.store';
+import { actionMove } from '../action/action.move';
+import { findContainers } from '../find/findContainers';
+import { withdrowEnegy } from '../action/withdrowEnegy';
 
 const isRepaiering = (creep: Creep) => {
   return (creep.memory as CreepMemory).repaiering;
@@ -12,6 +12,9 @@ const isRepaiering = (creep: Creep) => {
 const isRepaierTargetIdExistInMemory = (creep: Creep) => {
   return (creep.memory as CreepMemory).repaierTargetId !== undefined;
 };
+
+const getCurrentContainerId = (creep: Creep) =>
+  (creep.memory as CreepMemory).containerId;
 
 const findLowestHitsTarget = (creep: Creep) => {
   const targets = creep.room.find(FIND_STRUCTURES, {
@@ -23,17 +26,15 @@ const findLowestHitsTarget = (creep: Creep) => {
 
 export const roleRepaierer = {
   run: function (creep: Creep) {
-    (creep.memory as CreepMemory).roleAs = "repaierer";
+    (creep.memory as CreepMemory).roleAs = 'repaierer';
     // TODO: Creepが作りたての状態を考慮できていないため、roleのみが設定された状態のCreepの扱いを決める
     switch (isRepaiering(creep)) {
       // TODO: true, falseから具体的な状態名にする
-      case true:
+      case 'repaiering':
         if (isCreepStoreEmpty(creep)) {
           memoryManager.refreshMemory(creep);
-          (creep.memory as CreepMemory).repaiering = false;
-          const randTargetId = findTarget.randomSourcesFind(creep);
-          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
-          creep.say("🔄 harvest");
+          (creep.memory as CreepMemory).repaiering = 'fillingEnegy';
+          creep.say('🔄 harvest');
           break;
         }
 
@@ -65,27 +66,41 @@ export const roleRepaierer = {
             break;
         }
 
-      case false:
+      case 'fillingEnegy':
         if (isCreepStoreFull(creep)) {
           memoryManager.refreshMemory(creep);
-          (creep.memory as CreepMemory).repaiering = true;
+          (creep.memory as CreepMemory).repaiering = 'repaiering';
           const lowestHitsTarget = findLowestHitsTarget(creep);
           (creep.memory as CreepMemory).repaierTargetId = lowestHitsTarget.id;
-          creep.say("🔧 repaier");
+          creep.say('🔧 repaier');
         }
 
         // TODO: Creepの動作状態をMemoryに保存
-        actionHarvest.run(creep);
+        let target: AnyStructure | null = null;
+        if (getCurrentContainerId(creep)) {
+          target = Game.getObjectById(
+            getCurrentContainerId(creep)
+          ) as AnyStructure;
+        } else {
+          const targets = findContainers(creep);
+          if (targets.length > 0) {
+            (creep.memory as CreepMemory).withdrowTargetId = targets[0].id;
+            target = targets[0];
+          } else {
+            // TODO: エナジーが入ったコンテナがない場合の処理を書く
+            break;
+          }
+        }
+
+        withdrowEnegy(creep);
+        break;
 
       case undefined:
         // TODO: Creepが作りたての状態が決まったら削除する
-        if (isCreepStoreEmpty(creep)) {
-          memoryManager.refreshMemory(creep);
-          (creep.memory as CreepMemory).repaiering = false;
-          const randTargetId = findTarget.randomSourcesFind(creep);
-          (creep.memory as CreepMemory).harvestTargetId = randTargetId;
-          creep.say("🔄 harvest");
-        }
+        memoryManager.refreshMemory(creep);
+        (creep.memory as CreepMemory).repaiering = 'fillingEnegy';
+        (creep.memory as CreepMemory).roleAs = 'repaierer';
+        creep.say('🔄 harvest');
         break;
     }
   },
