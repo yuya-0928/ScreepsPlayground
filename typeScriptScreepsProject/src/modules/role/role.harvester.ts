@@ -9,10 +9,6 @@ const isHarvesting = (creep: Creep) => {
   return (creep.memory as CreepMemory).refueling;
 };
 
-const isHarvestingTargetIdExistInMemory = (creep: Creep) => {
-  return (creep.memory as CreepMemory).harvestTargetId !== undefined;
-};
-
 // TODO: harvesterがharvestする場所を固定にする
 // TODO: harvestTargetIdをMemoryに保存する処理をaction.harvest.tsに移動する
 export const roleHarvester = {
