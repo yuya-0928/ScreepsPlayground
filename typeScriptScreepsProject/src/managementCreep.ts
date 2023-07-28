@@ -1,11 +1,11 @@
-import { creepCosts } from "./creepCosts";
+import { creepCosts } from './creepCosts';
 
 export const managementCreepCount = {
   harvester: 3,
   transporter: 3,
   upgrader: 3,
   builder: 3,
-  repaierer: 0,
+  repaierer: 3,
 };
 
 export const minimumHarvesterCount = 2;
