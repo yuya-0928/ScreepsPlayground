@@ -1,21 +1,23 @@
 import { findContainers } from '../find/findContainers';
 import { CreepMemory } from '../../main';
+import { actionTransfer } from './actionTransfer';
 
 const getCurrentContainerId = (creep: Creep) =>
   (creep.memory as CreepMemory).containerId;
 
 export const withdrowEnegy = (creep: Creep) => {
-  let target: AnyStructure | null = null;
-  if (getCurrentContainerId(creep)) {
-    target = Game.getObjectById(getCurrentContainerId(creep)) as AnyStructure;
-  } else {
+  if (!getCurrentContainerId(creep)) {
     const targets = findContainers(creep);
     if (targets.length > 0) {
       (creep.memory as CreepMemory).withdrowTargetId = targets[0].id;
-      target = targets[0];
     } else {
-      // TODO: エナジーが入ったコンテナがない場合の処理を書く
+      console.log('No containers found');
     }
+  }
+
+  if (findContainers(creep) === undefined || 0) {
+    actionTransfer(creep);
+    return;
   }
 
   if ((creep.memory as CreepMemory).withdrowTargetId) {
